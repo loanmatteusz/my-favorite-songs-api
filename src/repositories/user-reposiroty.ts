@@ -1,12 +1,14 @@
 import { User } from "@prisma/client";
 import { hashSync } from "bcrypt";
+import { CreateUserDto } from "src/app/user/dto/create-user.dto";
+import { UpdateUserDto } from "src/app/user/dto/update-user.dto";
 import { PrismaService } from "src/infra/prisma.service";
 import { RepositoryContract } from "./repository-contract";
 
-export class UserRepository implements RepositoryContract<User> {
+export class UserRepository implements RepositoryContract<User, CreateUserDto, UpdateUserDto> {
   constructor(private prisma: PrismaService) { }
 
-  async create(createUserDto: Omit<User, "id">): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const user = await this.prisma.user.create({
       data: {
         ...createUserDto,
@@ -73,7 +75,7 @@ export class UserRepository implements RepositoryContract<User> {
   }
 
 
-  async update(id: string, updateDto: Partial<User>): Promise<Partial<User>> {
+  async update(id: string, updateDto: UpdateUserDto): Promise<Partial<User>> {
     const user = await this.prisma.user.update({
       data: {
         ...updateDto,

@@ -1,7 +1,7 @@
-export interface RepositoryContract<T> {
-  create: (createDto: Omit<T, "id">) => Promise<T>
+export interface RepositoryContract<T, CreateDto, UpdateDto> {
+  create: (createDto: CreateDto) => Promise<T>
   findAll: () => Promise<Partial<T>[]>
   find: (id: string) => Promise<Partial<T>>
-  update: (id: string, updateDto: Partial<T>) => Promise<Partial<T>>
+  update: (id: string, updateDto: UpdateDto) => Promise<Partial<T>>
   delete: (id: string) => Promise<string>
 }

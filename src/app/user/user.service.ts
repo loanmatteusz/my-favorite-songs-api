@@ -9,11 +9,7 @@ export class UserService {
   constructor(private userRepository: UserRepository) { }
 
   async create(createUserDto: CreateUserDto) {
-    const user = this.userRepository.create({
-      ...createUserDto,
-      created_at: new Date(),
-      updated_at: new Date(),
-    });
+    const user = this.userRepository.create(createUserDto);
     return user;
   }
 
@@ -35,7 +31,7 @@ export class UserService {
     return user;
   }
 
-  
+
   async remove(id: string) {
     await this.userRepository.delete(id);
   }
