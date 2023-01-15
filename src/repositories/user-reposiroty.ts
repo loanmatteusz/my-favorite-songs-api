@@ -30,7 +30,7 @@ export class UserRepository implements RepositoryContract<User, CreateUserDto, U
 
 
   async find(id: string): Promise<Partial<User>> {
-    const user = this.prisma.user.findFirst({
+    const user = await this.prisma.user.findFirst({
       select: {
         name: true,
         lastname: true,
