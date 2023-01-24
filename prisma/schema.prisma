@@ -8,14 +8,17 @@ datasource db {
 }
 
 model User {
-  id         String     @id @default(cuid())
+  id         String   @id @default(cuid())
   name       String
   lastname   String?
-  email      String     @unique
+  email      String   @unique
   password   String
-  created_at DateTime   @default(now())
-  updated_at DateTime   @default(now())
-  playlist   Playlist[]
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  playlists Playlist[]
+
+  @@map("user")
 }
 
 model Playlist {
@@ -24,20 +27,38 @@ model Playlist {
   description String
   created_at  DateTime @default(now())
   updated_at  DateTime @default(now())
-  userId      String?
-  musics      Music[]
-  User        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  userId String
+  User   User?  @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+
+  musics PlaylistHasMusic[]
+
+  @@map("playlist")
+}
+
+model PlaylistHasMusic {
+  playlistId  String
+  musicId     String
+  assigned_at DateTime  @default(now())
+  assigned_by String
+  music       Music?    @relation(fields: [musicId], references: [id])
+  playlist    Playlist? @relation(fields: [playlistId], references: [id])
+
+  @@id([playlistId, musicId])
+  @@map("playlist_has_music")
 }
 
 model Music {
-  id         String    @id @default(cuid())
+  id         String   @id @default(cuid())
   name       String
   author     String
-  created_at DateTime  @default(now())
-  updated_at DateTime  @default(now())
-  playlistId String?
-  links      Link[]
-  Playlist   Playlist? @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  links     Link[]
+  playlists PlaylistHasMusic[]
+
+  @@map("music")
 }
 
 model Link {
@@ -46,5 +67,7 @@ model Link {
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
   musicId    String?
-  Music      Music?   @relation(fields: [musicId], references: [id], onDelete: Cascade)
+  music      Music?   @relation(fields: [musicId], references: [id])
+
+  @@map("link")
 }
