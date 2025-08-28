@@ -6,11 +6,13 @@ import type { UserRepository } from "../../domain/repositories/user.repository";
 // Value Objects
 import { Email } from "../../domain/value-objects/email";
 import { createPassword } from "../../domain/value-objects/password";
+import { PasswordHasher } from "../../domain/services/password-hasher.service";
+import { IdGenerator } from "../../domain/services/id-generator.service";
 
 export function CreateUserUseCase(deps: {
     userRepository: UserRepository,
-    hashPassword: (plain: string) => Promise<string>,
-    idGenerator: () => string,
+    hashPassword: PasswordHasher,
+    idGenerator: IdGenerator,
 }) {
     return async function (input: CreateUserInput): Promise<User> {
         const email = Email.create(input.email);
@@ -18,7 +20,7 @@ export function CreateUserUseCase(deps: {
         const existing = await deps.userRepository.findByEmail(email.getValue())
         if (existing) throw new Error("Email already in use");
 
-        const id = deps.idGenerator();
+        const id = deps.idGenerator.generate();
         const passwordVO = await createPassword(input.password, deps.hashPassword);
 
         const newUser: User = {
@@ -28,7 +30,6 @@ export function CreateUserUseCase(deps: {
             password: passwordVO,
         }
 
-        // Posso retornar o resultado com `await` caso eu precise manipular o valor na camada onde fica o controller
         return deps.userRepository.create(newUser);
     }
 }

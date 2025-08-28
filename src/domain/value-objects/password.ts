@@ -1,13 +1,15 @@
+import { PasswordHasher } from "../services/password-hasher.service";
+
 export type Password = {
     value: string;
 };
 
 export const createPassword = async (
     raw: string,
-    hashFn: (plain: string) => Promise<string>,
+    hashFn: PasswordHasher,
 ): Promise<Password> => {
     validatePassword(raw);
-    const hashed = await hashFn(raw);
+    const hashed = await hashFn.hash(raw);
     return { value: hashed };
 };
 
