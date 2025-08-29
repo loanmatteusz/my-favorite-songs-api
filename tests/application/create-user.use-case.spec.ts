@@ -31,33 +31,28 @@ describe("Create User UseCase", () => {
         idGenerator: fakeIdGenerator,
     });
 
-    it("should create a new user when the email does not exist", async () => {
-        const userInput: CreateUserInput = {
+    let userInput: CreateUserInput;
+    beforeEach(() => {
+        userInput = {
             name: "Tester",
             email: "tester@test.com",
             password: "T3st!@#$%",
         };
+    })
+
+    it("should create a new user when the email does not exist", async () => {
         const newUser = await createUser(userInput);
         expect(newUser).toBeDefined();
         expect(newUser.email.getValue()).toBe(userInput.email);
     });
 
     it("should throw an error when the email is already in use", async () => {
-        const userInput: CreateUserInput = {
-            name: "Tester",
-            email: "test@mail.com",
-            password: "T3st!@#$%",
-        };
+        userInput.email = "test@mail.com";
         const promise = createUser(userInput);
         await expect(promise).rejects.toThrow("Email already in use");
     });
 
     it("should assign the ID returned by the IdGenerator to the new user", async () => {
-        const userInput: CreateUserInput = {
-            name: "Tester",
-            email: "tester@test.com",
-            password: "T3st!@#$%",
-        };
         const newUser = await createUser(userInput);
         expect(newUser).toBeDefined();
         expect(newUser.id).toBe("uuid-123");
