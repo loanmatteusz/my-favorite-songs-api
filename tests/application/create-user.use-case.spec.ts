@@ -57,4 +57,10 @@ describe("Create User UseCase", () => {
         expect(newUser).toBeDefined();
         expect(newUser.id).toBe("uuid-123");
     });
+
+    it("should hash the user password", async () => {
+        const newUser = await createUser(userInput);
+        expect(newUser).toBeDefined();
+        expect(newUser.password.value).toEqual(`hashed-${userInput.password}`);
+    });
 });
