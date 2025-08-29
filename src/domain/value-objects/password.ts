@@ -4,15 +4,6 @@ export type Password = {
     value: string;
 };
 
-export const createPassword = async (
-    raw: string,
-    hashFn: PasswordHasher,
-): Promise<Password> => {
-    validatePassword(raw);
-    const hashed = await hashFn.hash(raw);
-    return { value: hashed };
-};
-
 export const validatePassword = (raw: string): Password => {
     if (!raw) throw new Error("Password cannot be empty");
     if (raw.length < 8) throw new Error("Password must have at least 8 characters");
@@ -24,6 +15,15 @@ export const validatePassword = (raw: string): Password => {
     return { value: raw };
 }
 
-export const matchesPassword = (password: Password, plain: string): boolean => {
-    return password.value === plain;
+export const createPassword = async (
+    raw: string,
+    hashFn: PasswordHasher,
+): Promise<Password> => {
+    validatePassword(raw);
+    const hashed = await hashFn.hash(raw);
+    return { value: hashed };
+};
+
+export const matchesPassword = async (password: Password, plain: string, hashFn: PasswordHasher): Promise<boolean> => {
+    return hashFn.compare(plain, password.value);
 };
