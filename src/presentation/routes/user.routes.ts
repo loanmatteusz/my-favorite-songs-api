@@ -1,8 +1,8 @@
 import { Router } from "express";
-import type { Router as RouterType } from "express";
+import type { Request, Response, Router as RouterType } from "express";
 
 export function makeUserRoutes(deps: {
-    createUserController: (req: any, res: any) => Promise<void>;
+    createUserController: (req: Request, res: Response) => Promise<void>;
 }): RouterType {
     const router = Router();
 
