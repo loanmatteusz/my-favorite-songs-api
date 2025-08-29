@@ -51,4 +51,15 @@ describe("Create User UseCase", () => {
         const promise = createUser(userInput);
         await expect(promise).rejects.toThrow("Email already in use");
     });
+
+    it("should assign the ID returned by the IdGenerator to the new user", async () => {
+        const userInput: CreateUserInput = {
+            name: "Tester",
+            email: "tester@test.com",
+            password: "T3st!@#$%",
+        };
+        const newUser = await createUser(userInput);
+        expect(newUser).toBeDefined();
+        expect(newUser.id).toBe("uuid-123");
+    });
 });
