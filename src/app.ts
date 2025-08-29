@@ -5,7 +5,7 @@ import { makeCreateUserController } from './presentation/controllers/user.contro
 import { makeUserRoutes } from './presentation/routes/user.routes';
 import { UserRepositoryInMemory } from './infrastructure/repositories/user.repository.in-memory';
 import { errorMiddleware } from './infrastructure/http/middlewares/error.middlware';
-import { bcryptPasswordHasher } from './infrastructure/services/bcrypt-hasher.service';
+import { bcryptHasher } from './infrastructure/services/bcrypt-hasher.service';
 import { uuidIdGenerator } from './infrastructure/services/uuid-id-generator.service';
 
 const app = express();
@@ -15,11 +15,10 @@ app.use(express.json());
 const usersDb: User[] = [];
 const userRepository = new UserRepositoryInMemory(usersDb);
 
-
 // use-case e controller
 const createUserUseCase = CreateUserUseCase({
     userRepository,
-    hashPassword: bcryptPasswordHasher,
+    hashPassword: bcryptHasher,
     idGenerator: uuidIdGenerator,
 });
 
