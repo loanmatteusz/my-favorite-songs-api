@@ -5,9 +5,7 @@ export class UserRepositoryInMemory implements UserRepository {
 
     constructor(
         private users: User[],
-    ) {
-        this.users = [];
-    }
+    ) { }
 
     public create(user: User): Promise<User> {
         const newUser: User = {
@@ -17,11 +15,19 @@ export class UserRepositoryInMemory implements UserRepository {
         return Promise.resolve(newUser);
     }
 
-    public findById(id: string): Promise<any> {
-        return Promise.resolve("");
+    public findById(id: string): Promise<User | null> {
+        const user = this.users.find(user => user.id === id);
+        if (!user) {
+            return Promise.resolve(null);
+        }
+        return Promise.resolve(user);
     }
 
     public findByEmail(email: string): Promise<any> {
-        return Promise.resolve("");
+        const user = this.users.find(user => user.email.getValue() === email);
+        if (!user) {
+            return Promise.resolve(null);
+        }
+        return Promise.resolve(user);
     }
 }
