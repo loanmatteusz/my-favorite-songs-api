@@ -41,4 +41,14 @@ describe("Create User UseCase", () => {
         expect(newUser).toBeDefined();
         expect(newUser.email.getValue()).toBe(userInput.email);
     });
+
+    it("should throw an error when the email is already in use", async () => {
+        const userInput: CreateUserInput = {
+            name: "Tester",
+            email: "test@mail.com",
+            password: "T3st!@#$%",
+        };
+        const promise = createUser(userInput);
+        await expect(promise).rejects.toThrow("Email already in use");
+    });
 });
