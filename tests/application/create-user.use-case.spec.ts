@@ -63,4 +63,10 @@ describe("Create User UseCase", () => {
         expect(newUser).toBeDefined();
         expect(newUser.password.value).toEqual(`hashed-${userInput.password}`);
     });
+
+    it("should throw an error for invalid email format", async () => {
+        userInput.email = "invalid-email.com";
+        const promise = createUser(userInput);
+        await expect(promise).rejects.toThrow("Invalid email format");
+    });
 });
