@@ -15,6 +15,8 @@ describe("UserRepositoryInMemory Implementation", () => {
             name: "FakeTester",
             email: Email.create("test@mail.com"),
             password: { value: "hashed-password" },
+            createdAt: new Date(),
+            updatedAt: new Date(),
         };
     });
 

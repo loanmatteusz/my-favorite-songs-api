@@ -12,6 +12,8 @@ describe("Create User UseCase", () => {
         name: "FakeTester",
         email: Email.create("test@mail.com"),
         password: { value: "hashed-password" },
+        createdAt: new Date(),
+        updatedAt: new Date(),
     };
     const fakeRepository: UserRepository = {
         create: jest.fn(async (user) => user),
