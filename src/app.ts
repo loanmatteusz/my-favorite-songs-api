@@ -12,8 +12,13 @@ const app = express();
 app.use(express.json());
 
 // mocks/deps
-const usersDb: User[] = [];
-const userRepository = new UserRepositoryInMemory(usersDb);
+const db: {
+    users: User[],
+} = {
+    users: [],
+};
+
+const userRepository = new UserRepositoryInMemory(db.users);
 
 // use-case e controller
 const createUserUseCase = CreateUserUseCase({
