@@ -58,6 +58,16 @@ describe("UserRepositoryInMemory Implementation", () => {
         expect(found).toBeNull();
     });
 
+    it("should create user with createdAt and updatedAt", async () => {
+        const date = new Date();
+        fakeUser.createdAt = date;
+        fakeUser.updatedAt = date;
+        await repository.create(fakeUser);
+        const found = await repository.findById(fakeUser.id);
+        expect(found).toBeDefined();
+        expect(found!.createdAt).toEqual(date);
+    });
+
     // // Aqui talvez devesse haver mais implementações, pois seria um findAll onde eu, provavelmente, implementaria filtro e paginação
     // it("should handle multiple users");
 });
