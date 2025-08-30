@@ -28,6 +28,8 @@ export function CreateUserUseCase(deps: {
             name: input.name,
             email,
             password: passwordVO,
+            createdAt: new Date(),
+            updatedAt: new Date(),
         }
 
         return deps.userRepository.create(newUser);
